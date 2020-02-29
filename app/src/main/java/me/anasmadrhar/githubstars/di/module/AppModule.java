@@ -1,11 +1,17 @@
 package me.anasmadrhar.githubstars.di.module;
 
+import android.app.Application;
+
+import androidx.room.Room;
+
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import me.anasmadrhar.githubstars.data.local.GithubDatabase;
+import me.anasmadrhar.githubstars.data.local.dao.GithubDao;
 import me.anasmadrhar.githubstars.data.remote.ApiConstants;
 import me.anasmadrhar.githubstars.data.remote.ApiService;
 import okhttp3.OkHttpClient;
@@ -43,4 +49,17 @@ public class AppModule {
 
         return retrofit.create(ApiService.class);
     }
+
+    @Provides
+    @Singleton
+    GithubDatabase provideGithubDatabase(Application application) {
+        return Room.databaseBuilder(application, GithubDatabase.class, "github.db").build();
+    }
+
+    @Provides
+    @Singleton
+    GithubDao provideGithubDao(GithubDatabase githubDatabase) {
+        return githubDatabase.githubDao();
+    }
+
 }

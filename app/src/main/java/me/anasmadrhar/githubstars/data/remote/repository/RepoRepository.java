@@ -1,5 +1,7 @@
 package me.anasmadrhar.githubstars.data.remote.repository;
 
+import android.util.Log;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 
@@ -7,11 +9,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import me.anasmadrhar.githubstars.data.local.dao.GithubDao;
+import me.anasmadrhar.githubstars.data.local.entity.RepoEntity;
 import me.anasmadrhar.githubstars.data.remote.ApiService;
 import me.anasmadrhar.githubstars.data.remote.NetworkBoundResource;
 import me.anasmadrhar.githubstars.data.remote.Resource;
 import me.anasmadrhar.githubstars.data.remote.model.PopularReposResponse;
-import me.anasmadrhar.githubstars.data.remote.model.Repo;
 import me.anasmadrhar.githubstars.utils.DateUtils;
 import retrofit2.Call;
 
@@ -24,10 +27,13 @@ import retrofit2.Call;
 public class RepoRepository {
 
     private final ApiService apiService;
+    private final GithubDao githubDao;
+
 
     @Inject
-    RepoRepository(ApiService service) {
+    RepoRepository(ApiService service, GithubDao githubDao) {
         this.apiService = service;
+        this.githubDao = githubDao;
     }
 
     /**
@@ -36,19 +42,24 @@ public class RepoRepository {
      *
      * @return List of articles
      */
-    public LiveData<Resource<List<Repo>>> loadPopularRepos(int page) {
-        return new NetworkBoundResource<List<Repo>, PopularReposResponse>() {
+    public LiveData<Resource<List<RepoEntity>>> loadPopularRepos(int page) {
+        return new NetworkBoundResource<List<RepoEntity>, PopularReposResponse>() {
 
             @Override
             protected void saveCallResult(PopularReposResponse item) {
-                //TODO: SAVE TO DATABASE
+                if (null != item) {
+                    Log.d("saveCallResult", item.getPopularRepos().size() + "");
+                    githubDao.saveRepos(item.getPopularRepos());
+                }
             }
 
             @NonNull
             @Override
-            protected LiveData<List<Repo>> loadFromDb() {
-                //TODO: LOAD FROM DATABASE
-                return null;
+            protected LiveData<List<RepoEntity>> loadFromDb() {
+                LiveData<List<RepoEntity>> data = githubDao.loadPopularRepos();
+                if (data.getValue() != null)
+                    Log.d("loadFromDb", data.getValue().size() + "");
+                return data;
             }
 
             @NonNull
