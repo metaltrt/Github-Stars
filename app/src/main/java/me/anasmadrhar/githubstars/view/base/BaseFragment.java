@@ -14,6 +14,10 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
+import javax.inject.Inject;
+
+import dagger.android.support.AndroidSupportInjection;
+
 /**
  * Generic Fragment with databinding and viewModel
  * Author: Anas Madrhar
@@ -23,7 +27,10 @@ import androidx.lifecycle.ViewModelProvider;
 public abstract class BaseFragment<V extends ViewModel, D extends ViewDataBinding> extends Fragment {
 
     protected V viewModel;
+
     protected D dataBinding;
+
+    @Inject
     ViewModelProvider.Factory viewModelFactory;
 
     protected abstract Class<V> getViewModel();
@@ -33,6 +40,7 @@ public abstract class BaseFragment<V extends ViewModel, D extends ViewDataBindin
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
+        AndroidSupportInjection.inject(this);
         super.onCreate(savedInstanceState);
         viewModel = new ViewModelProvider(this, viewModelFactory).get(getViewModel());
     }
