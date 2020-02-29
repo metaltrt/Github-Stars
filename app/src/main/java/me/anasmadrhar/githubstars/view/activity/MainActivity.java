@@ -1,8 +1,10 @@
-package me.anasmadrhar.githubstars;
+package me.anasmadrhar.githubstars.view.activity;
+
+import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Bundle;
+import me.anasmadrhar.githubstars.R;
 
 public class MainActivity extends AppCompatActivity {
 
