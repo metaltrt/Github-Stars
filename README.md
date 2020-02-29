@@ -25,5 +25,7 @@ Or Build using Android Studio (I used Android Studio 4.1 Canary)
 
 # Screenshots
 
+![GitHub Stars Screenshot](./screenshots/1.png)
+![GitHub Stars Screenshot](./screenshots/2.png)
 
 
