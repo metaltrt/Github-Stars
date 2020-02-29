@@ -11,6 +11,7 @@ import javax.inject.Inject;
 
 import me.anasmadrhar.githubstars.data.local.dao.GithubDao;
 import me.anasmadrhar.githubstars.data.local.entity.RepoEntity;
+import me.anasmadrhar.githubstars.data.remote.ApiConstants;
 import me.anasmadrhar.githubstars.data.remote.ApiService;
 import me.anasmadrhar.githubstars.data.remote.NetworkBoundResource;
 import me.anasmadrhar.githubstars.data.remote.Resource;
@@ -56,7 +57,7 @@ public class RepoRepository {
             @NonNull
             @Override
             protected LiveData<List<RepoEntity>> loadFromDb() {
-                LiveData<List<RepoEntity>> data = githubDao.loadPopularRepos();
+                LiveData<List<RepoEntity>> data = githubDao.loadPopularRepos(page, ApiConstants.PER_PAGE);
                 if (data.getValue() != null)
                     Log.d("loadFromDb", data.getValue().size() + "");
                 return data;
@@ -66,7 +67,7 @@ public class RepoRepository {
             @Override
             protected Call<PopularReposResponse> createCall() {
                 String query = "created:>" + DateUtils.getDateThreeMonthsAgo();
-                return apiService.loadPopularRepos(query, page);
+                return apiService.loadPopularRepos(query, page, ApiConstants.PER_PAGE);
             }
         }.getAsLiveData();
     }

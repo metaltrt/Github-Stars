@@ -1,6 +1,8 @@
 package me.anasmadrhar.githubstars.di.builder;
 
 import dagger.Module;
+import dagger.android.ContributesAndroidInjector;
+import me.anasmadrhar.githubstars.view.Fragment.RepoListFragment;
 
 /**
  * This builder provides android injector service to fragments
@@ -10,5 +12,8 @@ import dagger.Module;
  */
 @Module
 public abstract class FragmentBuilderModule {
+
+    @ContributesAndroidInjector
+    abstract RepoListFragment contributeRepoListFragment();
 
 }

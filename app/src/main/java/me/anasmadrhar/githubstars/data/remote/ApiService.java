@@ -12,5 +12,5 @@ import retrofit2.http.Query;
  */
 public interface ApiService {
     @GET("search/repositories?sort=stars&order=desc")
-    Call<PopularReposResponse> loadPopularRepos(@Query("q") String query, @Query("page") int page);
+    Call<PopularReposResponse> loadPopularRepos(@Query("q") String query, @Query("page") int page, @Query("per_page") int perPage);
 }

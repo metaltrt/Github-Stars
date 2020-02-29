@@ -19,8 +19,8 @@ import me.anasmadrhar.githubstars.data.local.entity.RepoEntity;
 @Dao
 public interface GithubDao {
 
-    @Query("SELECT * FROM repos")
-    LiveData<List<RepoEntity>> loadPopularRepos();
+    @Query("SELECT * FROM repos order by stargazersCount desc limit (:page * :perPage)")
+    LiveData<List<RepoEntity>> loadPopularRepos(int page, int perPage);
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void saveRepos(List<RepoEntity> repoEntities);
